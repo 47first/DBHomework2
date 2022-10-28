@@ -2,16 +2,18 @@
 
 namespace MyWork
 {
-    public class CategoryModel
+    public class AutoModel
     {
         public int Id { get; set; }
-        public string? Category { get; set; }
-        public int Discount { get; set; }
+        public string? Model { get; set; }
+        public string? Mark { get; set; }
+        public int Cost { get; set; }
+        public int Amount { get; set; }
     }
 
-    public class CategoryContext : DbContext
+    public class AutoModelContext : DbContext
     {
-        public DbSet<CategoryModel> Categories { get; set; } = null!;
+        public DbSet<AutoModel> Autos { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

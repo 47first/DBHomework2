@@ -10,18 +10,20 @@
 
         private void DataGridViewDbLoad()
         {
-            using (CategoryContext db = new CategoryContext())
+            using (AutoModelContext db = new AutoModelContext())
             {
+                db.Database.EnsureDeleted();
+                db.Database.EnsureCreated();
                 //Если нет ни одного элемента в бд
-                if (!db.Categories.Any())
+                if (!db.Autos.Any())
                 {
                     //Добавляем и сохраняем данные
-                    db.Categories.Add( new CategoryModel { Category = "Some Category", Discount = 13 } );
+                    db.Autos.Add( new AutoModel { Amount = 3, Cost = 500, Mark = "Lada", Model="Largus" } );
                     db.SaveChanges();
                 }
 
                 //Отображаем текущее состояние бд 
-                dataGridView1.DataSource = db.Categories.ToList<CategoryModel>();
+                dataGridView1.DataSource = db.Autos.ToList<AutoModel>();
             }
         }
 
@@ -29,20 +31,22 @@
         {
             try
             {
-                string type = textBox2.Text;
-                int discount = Convert.ToInt32(textBox3.Text);
+                string model = modelTb.Text;
+                string mark = markTb.Text;
+                int cost = int.Parse(costTb.Text);
+                int amount = int.Parse(amountTb.Text);
 
-                using (CategoryContext db = new CategoryContext())
+                using (AutoModelContext db = new AutoModelContext())
                 {
                     //Создаем модель для добавления в бд
-                    CategoryModel categoryToAdd = new CategoryModel { Category = type, Discount = discount };
+                    AutoModel carToAdd = new AutoModel { Amount = amount, Cost = cost, Mark = mark, Model = model };
 
                     //Добавляем и сохраняем данные
-                    db.Categories.Add(categoryToAdd);
+                    db.Autos.Add(carToAdd);
                     db.SaveChanges();
 
                     //Отображаем текущее состояние бд 
-                    dataGridView1.DataSource = db.Categories.ToList<CategoryModel>();
+                    dataGridView1.DataSource = db.Autos.ToList<AutoModel>();
                 }
             }
             catch {
@@ -57,21 +61,23 @@
             try
             {
                 //Попытка привести к нужному типу
-                int id = Convert.ToInt32(textBox1.Text);
-                string type = textBox2.Text;
-                int discount = Convert.ToInt32(textBox3.Text);
+                int id = int.Parse(idTb.Text);
+                string model = modelTb.Text;
+                string mark = markTb.Text;
+                int cost = int.Parse(costTb.Text);
+                int amount = int.Parse(amountTb.Text);
 
-                using (CategoryContext db = new CategoryContext())
+                using (AutoModelContext db = new AutoModelContext())
                 {
-                    CategoryModel categoryToAdd = new CategoryModel { Category = type, Discount = discount, Id = id };
+                    AutoModel carToAdd = new AutoModel { Id = id, Amount = amount, Cost = cost, Mark = mark, Model = model };
                     try
                     {
                         //Пытаемся обновить данные
-                        db.Categories.Update(categoryToAdd);
+                        db.Autos.Update(carToAdd);
                         db.SaveChanges();
 
                         //Отображаем текущее состояние бд 
-                        dataGridView1.DataSource = db.Categories.ToList<CategoryModel>();
+                        dataGridView1.DataSource = db.Autos.ToList<AutoModel>();
                     }
                     catch
                     {
@@ -92,20 +98,20 @@
         {
             try
             {
-                int id = Convert.ToInt32(textBox1.Text);
+                int id = int.Parse(idTb.Text);
 
-                using (CategoryContext db = new CategoryContext())
+                using (AutoModelContext db = new AutoModelContext())
                 {
                     //Пытаемся найти категорию на удаление из бд
-                    CategoryModel? categoryToRemove = db.Categories.FirstOrDefault<CategoryModel?>(category => category.Id == id);
+                    AutoModel? categoryToRemove = db.Autos.FirstOrDefault<AutoModel?>(auto => auto.Id == id);
                     if (categoryToRemove != null)
                     {
                         //Удаляем и сохраняем
-                        db.Categories.Remove(categoryToRemove);
+                        db.Autos.Remove(categoryToRemove);
                         db.SaveChanges();
 
                         //Отображаем текущее состояние бд 
-                        dataGridView1.DataSource = db.Categories.ToList<CategoryModel>();
+                        dataGridView1.DataSource = db.Autos.ToList<AutoModel>();
                     }
                 }
             }
